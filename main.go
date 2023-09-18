@@ -53,7 +53,7 @@ func notify(title string, category string, location string,
 
 func scrapeEvents() {
 	// Open or create an SQLite database file
-	db, err := sql.Open("sqlite3", "scraped_data.db")
+	db, err := sql.Open("sqlite3", os.Getenv("SQLITE_PATH"))
 	if err != nil {
 		log.Fatal(err)
 	}
