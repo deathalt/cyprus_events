@@ -1,0 +1,21 @@
+version: '3.9'
+
+networks:
+  event-nw:
+
+volumes:
+  sender:
+
+services:
+  events-sender:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - TG_BOT_TOKEN='your-telegram-bot-token'
+      - TG_CHAT_ID='your-chat-id'
+      - SQLITE_PATH=/tmp/scraped_data.db
+    volumes:
+      - sender:/tmp
+    networks:
+      - event-nw
