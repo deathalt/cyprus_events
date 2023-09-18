@@ -23,8 +23,8 @@ A simple Go application that scrapes event details from "www.soldoutticketbox.co
 1. Clone the repository:
 
    ```bash
-   git clone https://path-to-your-repository.git
-   cd path-to-repository-folder
+   git clone https://github.com/deathalt/cyprus_events
+   cd cyprus_events
    ```
 
 2. Install required Go packages:
@@ -38,10 +38,12 @@ A simple Go application that scrapes event details from "www.soldoutticketbox.co
 
    - `TG_BOT_TOKEN`: Your Telegram Bot Token.
    - `TG_CHAT_ID`: The Chat ID where notifications will be sent.
+   - `SQLITE_PATH`: Path to *.db file
 
    ```bash
    export TG_BOT_TOKEN='your-telegram-bot-token'
    export TG_CHAT_ID='your-chat-id'
+   export SQLITE_PATH='/tmp/data.db'
    ```
 
 ## Usage
