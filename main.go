@@ -43,11 +43,11 @@ func notify(title string, category string, location string,
 
 	// Send the JSON data as a POST request
 	apiEndpoint := "https://api.telegram.org/bot" + os.Getenv("TG_BOT_TOKEN") + "/sendMessage" // Replace with your API endpoint
-	fmt.Printf("apiEndpoint: %v\n", apiEndpoint)
 	_, err = http.Post(apiEndpoint, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("Event sent: %s\n", title)
 
 }
 
@@ -126,6 +126,8 @@ func scrapeEvents() {
 				log.Fatal(err)
 			} else if rowsAffected > 0 {
 				notify(title, category, location, price, eventDate, buyTicketsURL)
+			} else if rowsAffected == 0 {
+				log.Printf("No new events found")
 			}
 		}
 
