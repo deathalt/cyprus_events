@@ -27,8 +27,8 @@ func notify(title string, category string, location string,
 	price string, eventDate string, buyTicketsURL string) {
 
 	// Structure the data
-	message := fmt.Sprintf("Event: %s\nCategory: %s\nLocation: %s\nPrice: %s\nEvent Date: %s\nBuy Tickets URL: %s",
-		title, category, location, price, eventDate, buyTicketsURL)
+	message := fmt.Sprintf("#%s\n\n Event: %s\n\nLocation: %s\nPrice: %s\nEvent Date: %s\n\nBuy Tickets URL: %s",
+		category, title, location, price, eventDate, buyTicketsURL)
 
 	data := map[string]string{
 		"chat_id": os.Getenv("TG_CHAT_ID"), // Assuming chatID is defined somewhere in your code
