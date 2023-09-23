@@ -24,15 +24,17 @@ func main() {
 }
 
 func notify(title string, category string, location string,
-	price string, eventDate string, buyTicketsURL string) {
+	price string, eventDate string, buyTicketsURL string, imageUrl string) {
 
 	// Structure the data
-	message := fmt.Sprintf("#%s\n\n Event: %s\n\nLocation: %s\nPrice: %s\nEvent Date: %s\n\nBuy Tickets URL: %s",
+	message := fmt.Sprintf("#%s\n\n Event: %s\n\nLocation: %s\nPrice: %s\nEvent Date: %s\n\n<a href=\"%s\">Buy Tickets</a>",
 		category, title, location, price, eventDate, buyTicketsURL)
 
 	data := map[string]string{
-		"chat_id": os.Getenv("TG_CHAT_ID"), // Assuming chatID is defined somewhere in your code
-		"text":    message,
+		"chat_id":    os.Getenv("TG_CHAT_ID"), // Assuming chatID is defined somewhere in your code
+		"photo":      imageUrl,
+		"caption":    message,
+		"parse_mode": "HTML",
 	}
 
 	// Convert the data to JSON
@@ -42,7 +44,7 @@ func notify(title string, category string, location string,
 	}
 
 	// Send the JSON data as a POST request
-	apiEndpoint := "https://api.telegram.org/bot" + os.Getenv("TG_BOT_TOKEN") + "/sendMessage" // Replace with your API endpoint
+	apiEndpoint := "https://api.telegram.org/bot" + os.Getenv("TG_BOT_TOKEN") + "/sendPhoto" // Replace with your API endpoint
 	_, err = http.Post(apiEndpoint, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
 		log.Fatal(err)
@@ -99,7 +101,8 @@ func scrapeEvents() {
 		category := element.Find("a.h3Style").First().Text()
 		location := element.Find("p.blackSmall span").First().Text()
 		price := element.Find("p.blackSmall span").Last().Text()
-
+		imgRelUrl, _ := element.Find("a img").Attr("src")
+		imgUrl := fmt.Sprintf("%s/%s", baseUrl, imgRelUrl)
 		// Extract event date and clean up the text
 		eventDate := element.Find("p.blackSmall span").Eq(1).Text()
 		eventDate = strings.TrimSpace(strings.Split(eventDate, "(")[0])
@@ -125,7 +128,7 @@ func scrapeEvents() {
 			if err != nil {
 				log.Fatal(err)
 			} else if rowsAffected > 0 {
-				notify(title, category, location, price, eventDate, buyTicketsURL)
+				notify(title, category, location, price, eventDate, buyTicketsURL, imgUrl)
 			} else if rowsAffected == 0 {
 				log.Printf("No new events found")
 			}
